@@ -1,4 +1,4 @@
-# <img src="\AFK-Script-Interpreter\icon.png" style="zoom:25%;" />  AFK Script
+# <img src="AFK-Script-Interpreter\icon.png" style="zoom:25%;" />  AFK Script
  A minimalist instruction language for automating user input at specified times
 
 ### About
