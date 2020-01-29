@@ -1,4 +1,4 @@
-# AFK Script
+# <img src="D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\icon.png" style="zoom:25%;" />  AFK Script
  A minimalist instruction language for automating user input at specified times
 
 ### About
@@ -6,8 +6,6 @@
 | Description    | Values |
 | -------------- | ------ |
 | File extension | .afk   |
-
-
 
 ### INSTRUCTION SET
 
