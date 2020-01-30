@@ -1,0 +1,2 @@
+LOG "Hello, world! The current time is: $TIME"
+LOG "The date is $DATE"

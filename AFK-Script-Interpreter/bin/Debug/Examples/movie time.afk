@@ -1,0 +1,9 @@
+# Read input and store in $URL
+
+
+LOG "=== WEB OPENER ==="
+READ "Webpage: " $URL
+AT 00:28
+LOG "Opening up $URL"
+START "" $URL
+PAUSE
