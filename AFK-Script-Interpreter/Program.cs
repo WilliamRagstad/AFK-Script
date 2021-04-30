@@ -4,8 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using ArgumentsUtil;
 
 namespace AFK_Script_Interpreter
@@ -13,15 +17,20 @@ namespace AFK_Script_Interpreter
     class Program
     {
         private static bool childProcesses;
-        
+        private static bool hideLogging;
+        private static Cursor Cursor;
+
         static void Main(string[] args)
         {
             // args = new[] {@"Examples\logging.afk", @"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
-            // args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
-            // args = new[] {@"Examples\movie time.afk"};
+            //args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
+            args = new[] {@"Examples\logging.afk", "/cp", "/hl"};
 
             Arguments a = Arguments.Parse(args);
             childProcesses = a.ContainsKey("cp");
+            hideLogging = a.ContainsKey("hl");
+            Cursor = new Cursor(Cursor.Current.Handle);
+
             if (a.Keyless.Count > 0)
             {
                 string file = a.Keyless[0];
@@ -67,10 +76,11 @@ namespace AFK_Script_Interpreter
             {
                 try
                 {
-                    
+
                     ArgumentsTemplate at = new ArgumentsTemplate(new List<ArgumentOption>()
                     {
-                        new ArgumentOption("cp", "Run all (if multiple) scripts as child processes")
+                        new ArgumentOption("cp", "Run all (if multiple) scripts as child processes"),
+                        new ArgumentOption("hl", "Hide logging")
                     }, false, new List<ArgumentCommand>()
                     {
                         new ArgumentCommand("file(s)", "The AFK Script file(s) to execute")
@@ -83,7 +93,7 @@ namespace AFK_Script_Interpreter
                 }
             }
         }
-        
+
         static void Run(object parameters)
         {
             string filepath = parameters.ToString();
@@ -131,11 +141,11 @@ namespace AFK_Script_Interpreter
                             break;
                         }
 
-                        
+
                         string waitingMessage = $"Waiting for '{date}' to pass by...";
                         if (childProcesses) Console.WriteLine(rawfilename + ": " + waitingMessage);
                         else Console.WriteLine(waitingMessage);
-                        
+
                         // Make this more efficient
                         while (DateTime.Now.CompareTo(date) < 0) Thread.Sleep(500);
                         break;
@@ -175,8 +185,7 @@ namespace AFK_Script_Interpreter
                             {
                                 Console.Write(text);
                                 string value = Console.ReadLine();
-                                if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
-                                else localVariables[variable] = value;
+                                SetVariable(variable, value, localVariables);
                             }
                             else
                             {
@@ -214,6 +223,7 @@ namespace AFK_Script_Interpreter
                         }
                         break;
                     case "PAUSE":
+                        Console.WriteLine("Paused. Press any key to continue.");
                         Console.ReadKey(true);
                         break;
                     case "WAIT":
@@ -236,26 +246,73 @@ namespace AFK_Script_Interpreter
                             break;
                         }
                         break;
-                    case "SET":
-                        if (instructionArgsCount < 2) Error_TooFewParams(instrcutionName, "[variable] [value]", filename);
+					case "SET":
+						if (instructionArgsCount < 2) Error_TooFewParams(instrcutionName, "[variable] [value]", filename);
+						if (instructionArgsCount == 2)
+						{
+							string variable = instructionArgsRaw(0);
+							if (variable.StartsWith("$"))
+							{
+								string value = instructionArgs(1);
+								if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
+								else localVariables[variable] = value;
+							}
+							else Error_UnexpectedToken(variable, "variable name", filename);
+						}
+						else Error_TooManyParams(instrcutionName, "[variable] [value]", filename);
+                        break;
+                    case "CLICK":
                         if (instructionArgsCount == 2)
                         {
-                            string variable = instructionArgsRaw(0);
-                            if (variable.StartsWith("$"))
+                            int x, y;
+                            if (int.TryParse(instructionArgs(0), out x) && int.TryParse(instructionArgs(1), out y))
                             {
-                                string value = instructionArgs(1);
-                                if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
-                                else localVariables[variable] = value;
+                                Cursor.Position = new System.Drawing.Point(x, y);
+                                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, 0);
                             }
-                            else Error_UnexpectedToken(variable, "variable name", filename);
+                            else
+                            {
+                                Error_UnexpectedToken(instructionArgs(0) + " or " + instructionArgs(1), "[x] [y]", filename);
+                            }
                         }
-                        else Error_TooManyParams(instrcutionName, "[variable] [value]", filename);
+                        else if (instructionArgsCount > 2)
+                        {
+                            Error_TooManyParams(instrcutionName, "[x] [y]", filename);
+                            break;
+                        }
+                        else if (instructionArgsCount < 2)
+                        {
+                            Error_TooFewParams(instrcutionName, "[x] [y]", filename);
+                            break;
+                        }
+                        break;
+                    case "KEY":
+                        if (instructionArgsCount > 0)
+                        {
+                            string toSend = "";
+                            for (int j = 0; j < instructionArgsCount; j++)
+                            {
+                                toSend += $"{instructionArgs(j)} ";
+                            }
+                            SendKeys.Send(toSend.TrimEnd());
+                        }
+                        else
+                        {
+                            Error_TooFewParams(instrcutionName, "[key] (key) (key) ...", filename);
+                            break;
+                        }
                         break;
                     default:
                         Error_UnknownInstruction(instrcutionName, i, filename);
                         break;
                 }
             }
+        }
+
+        private static void SetVariable(string variable, string value, Dictionary<string, string> localVariables)
+        {
+            if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
+            else localVariables[variable] = value;
         }
 
         static Dictionary<string, string> EnvironmentVariables = new Dictionary<string, string>()
@@ -311,5 +368,17 @@ namespace AFK_Script_Interpreter
             if (childProcesses) Console.Write($"Error in {file}: ");
             Console.WriteLine($"Unexpected token {token}! Expected {expected}...");
         }
+
+        #region Low-Level functions
+
+        [DllImport("user32.dll",CharSet=CharSet.Auto, CallingConvention=CallingConvention.StdCall)]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+        //Mouse actions
+        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const int MOUSEEVENTF_LEFTUP = 0x04;
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
+        #endregion
     }
 }

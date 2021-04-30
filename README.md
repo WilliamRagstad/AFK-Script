@@ -1,9 +1,11 @@
 # <img src="AFK-Script-Interpreter\icon.png" style="width:32px;" />  AFK Script
  A minimalist instruction language for automating user input at specified times
 
+![Downloads](https://img.shields.io/github/downloads/WilliamRagstad/AFK-Script/total)
+
 ### About
 
-A language developed by me.
+A time-based scripting language for automating user tasks.
 
 | Description    | Values |
 | -------------- | ------ |
@@ -14,12 +16,13 @@ A language developed by me.
 | Flag | Description                                 |
 | ---- | ------------------------------------------- |
 | /cp  | Run scripts as **parallel** child processes |
+| /hl  | Hides console log outputs                   |
 
 
 
 ### INSTRUCTION SET
 
-Mandatory parameters are specified with "[...]" and optional with "(..)".
+Mandatory parameters are specified with "[...]" and optional with "(...)".
 
 | Instruction | Parameter(s)          | Description                                                  |
 | ----------- | --------------------- | ------------------------------------------------------------ |
@@ -27,11 +30,11 @@ Mandatory parameters are specified with "[...]" and optional with "(..)".
 | WAIT        | [milliseconds]        | Waiting a certain number of **milliseconds**                 |
 | CLICK       | [x] [y]               | Performs a mouse click event on a given coordinate on the screen |
 | KEY         | [key] (key) (key) ... | performs a keystroke event of a single or a number of key combinations. |
-| TYPE        | [text]                | **Sends** a specified character string **to standard input** or at the current text cursor |
+| ~~TYPE~~    | [text]                | **Sends** a specified character string **to standard input** or at the current text cursor |
 | LOG         | [text]                | Write to the standard output (or console)                    |
 | READ        | [variable]            | Pauses program flow and **read from standard-input** and store in variable. Can be time, date or text |
 | START       | [program] (params)    | Starts a new process similar to using the command prompt     |
-| STOP        | [program]             | Stops a process if it is running                             |
+| ~~STOP~~    | [program]             | Stops a process if it is running                             |
 | PAUSE       |                       | Pause program and wait for user interaction                  |
 | SET         | [variable] [text]     | Store a text value in variable.                              |
 | #           | (comment)             | Everything to the right of the hash-tag will be commented out |
@@ -43,10 +46,10 @@ Mandatory parameters are specified with "[...]" and optional with "(..)".
 | date         | (MM)/(dd)/(yyyy)<br />(yyyy)-(MM)-(dd) | 05/29/2019, 2020-01-31, 02/14 or 04 | 3: Exact date<br />2: Exact day and month every year<br />1: Exact day every month and every year |
 | time         | (HH):(mm):(ss)                         | 05:50:06, 12:32 or 09               | 3: Exact time any day<br />2: Hour and minutes<br />1: Hour  |
 | variable     | $[name]                                | $shutdownTime, $repeat or $url      |                                                              |
-| milliseconds | [ammount]                              | 1000, 500                           |                                                              |
+| milliseconds | [amount]                               | 1000, 500                           |                                                              |
 | x            | [integer]                              | 405, 316                            |                                                              |
 | y            | [integer]                              | 231, 675                            |                                                              |
-| key          | [key name]                             | ENTER, Cancel, F6 or H              |                                                              |
+| key          | {[key name]} or [text]                 | ENTER, Cancel, F6 or HELLO          | [List or available keys](https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=netframework-4.8). |
 | text         | "[string]"                             | "Hello, world!"                     |                                                              |
 | program      | *Same as **text***                     |                                     |                                                              |
 | params       | *An array of **texts**.*               |                                     |                                                              |

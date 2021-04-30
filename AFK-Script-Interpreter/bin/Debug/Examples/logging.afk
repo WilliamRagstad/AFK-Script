@@ -1,2 +1,5 @@
+$MYVAR = "This is an custom variable value"
 LOG "Hello, world! The current time is: $TIME"
 LOG "The date is $DATE"
+LOG "I also have a var containing: $MYVAR"
+PAUSE
