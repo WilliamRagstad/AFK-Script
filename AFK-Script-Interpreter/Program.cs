@@ -17,7 +17,8 @@ namespace AFK_Script_Interpreter
         static void Main(string[] args)
         {
             // args = new[] {@"Examples\logging.afk", @"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
-            args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
+            // args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
+            // args = new[] {@"Examples\movie time.afk"};
 
             Arguments a = Arguments.Parse(args);
             childProcesses = a.ContainsKey("cp");
@@ -64,14 +65,22 @@ namespace AFK_Script_Interpreter
             }
             else
             {
-                ArgumentsTemplate at = new ArgumentsTemplate(new List<ArgumentOption>()
+                try
                 {
-                    new ArgumentOption("cp", "children", "Run all (if multiple) scripts as child processes")
-                }, false, new List<ArgumentCommand>()
+                    
+                    ArgumentsTemplate at = new ArgumentsTemplate(new List<ArgumentOption>()
+                    {
+                        new ArgumentOption("cp", "Run all (if multiple) scripts as child processes")
+                    }, false, new List<ArgumentCommand>()
+                    {
+                        new ArgumentCommand("file(s)", "The AFK Script file(s) to execute")
+                    }, true, new List<ArgumentText>(), "AFK Script", (char)KeySelector.CrossPlatformCompatible);
+                    at.ShowManual();
+                }
+                catch
                 {
-                    new ArgumentCommand("file(s)", "The AFK Script file(s) to execute")
-                }, true, null, "AFK Script", (char)KeySelector.CrossPlatformCompatible);
-                at.ShowManual();
+                    Console.WriteLine("Could not show command line");
+                }
             }
         }
         
@@ -83,9 +92,9 @@ namespace AFK_Script_Interpreter
             Dictionary<string, string> localVariables = new Dictionary<string, string>();
 
             // Check filetype
-            if (Path.GetExtension(filepath).ToLower() != ".afk")
-            {
+            if (Path.GetExtension(filepath).ToLower() != ".afk") {
                 Console.WriteLine($"The file {filename} is not a valid AFK Script file...");
+                return;
             }
 
             string[] instructions = File.ReadAllLines(filepath);
@@ -99,7 +108,6 @@ namespace AFK_Script_Interpreter
                 int instructionArgsCount = instructionParts.Length - 1;
                 string instructionArgs(int index) => SubstituteVariables(instructionParts[index + 1], localVariables).TrimStart('"').TrimEnd('"');
                 string instructionArgsRaw(int index) => instructionParts[index + 1].TrimStart('"').TrimEnd('"');
-                string instructionArgsRawest(int index) => instructionParts[index + 1]; // Don't ask
 
                 if (instrcutionName == "") continue;
                 switch (instrcutionName)
@@ -128,12 +136,8 @@ namespace AFK_Script_Interpreter
                         if (childProcesses) Console.WriteLine(rawfilename + ": " + waitingMessage);
                         else Console.WriteLine(waitingMessage);
                         
-
-                        while (DateTime.Now.CompareTo(date) < 0)
-                        {
-                            // Make this more efficient
-                            Thread.Sleep(1000);
-                        }
+                        // Make this more efficient
+                        while (DateTime.Now.CompareTo(date) < 0) Thread.Sleep(500);
                         break;
                     case "LOG":
                         if (instructionArgsCount == 1)
@@ -193,8 +197,15 @@ namespace AFK_Script_Interpreter
 
                             for (int j = 1; j < instructionArgsCount; j++) arguments += $"\"{instructionArgs(j)}\" ";
 
-                            if (program.Trim() == string.Empty) Process.Start(arguments.TrimEnd());
-                            else Process.Start(program, arguments.TrimEnd());
+                            try
+                            {
+                                if (program.Trim() == string.Empty) Process.Start(arguments.TrimEnd());
+                                else Process.Start(program.Trim(), arguments.TrimEnd());
+                            }
+                            catch (System.ComponentModel.Win32Exception)
+                            {
+                                Console.WriteLine($"Failed to start program: \"{program.Trim()}\", with arguments: {arguments.TrimEnd()} on line {i}.");
+                            }
                         }
                         else
                         {
@@ -225,6 +236,21 @@ namespace AFK_Script_Interpreter
                             break;
                         }
                         break;
+                    case "SET":
+                        if (instructionArgsCount < 2) Error_TooFewParams(instrcutionName, "[variable] [value]", filename);
+                        if (instructionArgsCount == 2)
+                        {
+                            string variable = instructionArgsRaw(0);
+                            if (variable.StartsWith("$"))
+                            {
+                                string value = instructionArgs(1);
+                                if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
+                                else localVariables[variable] = value;
+                            }
+                            else Error_UnexpectedToken(variable, "variable name", filename);
+                        }
+                        else Error_TooManyParams(instrcutionName, "[variable] [value]", filename);
+                        break;
                     default:
                         Error_UnknownInstruction(instrcutionName, i, filename);
                         break;
@@ -235,7 +261,7 @@ namespace AFK_Script_Interpreter
         static Dictionary<string, string> EnvironmentVariables = new Dictionary<string, string>()
         {
             {"$TIME", DateTime.Now.ToString("HH:mm:ss")},
-            {"$DATE", DateTime.Now.ToString("MM'/'dd'/'yyyy")},
+            {"$DATE", DateTime.Now.ToString("yyyy'/'MM'/'dd")},
             {"$TEST", "Hello, this is a general test :D"}
         };
         static string SubstituteVariables(string input, Dictionary<string, string> variables)

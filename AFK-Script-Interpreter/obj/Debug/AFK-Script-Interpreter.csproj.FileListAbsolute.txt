@@ -1,6 +1,3 @@
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\AFK-Script-Interpreter.exe.config
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\AFK-Script-Interpreter.exe
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\AFK-Script-Interpreter.pdb
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\Microsoft.Win32.Primitives.dll
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\netstandard.dll
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\System.AppContext.dll
@@ -98,9 +95,12 @@ D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\b
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\System.Xml.XPath.dll
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\System.Xml.XPath.XDocument.dll
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\ArgumentsUtil.dll
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.csprojResolveAssemblyReference.cache
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.exe.config
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.csproj.CoreCompileInputs.cache
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.csproj.CopyComplete
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.exe
-D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.pdb
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\AFKScript.exe.config
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\AFKScript.exe
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\AFKScript.pdb
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.csprojAssemblyReference.cache
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFKScript.exe.config
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFKScript.exe
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFKScript.pdb

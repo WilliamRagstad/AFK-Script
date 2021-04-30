@@ -7,7 +7,7 @@
     <ProjectGuid>{F84C1691-E13E-493B-B92E-617282E31C63}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>AFK_Script_Interpreter</RootNamespace>
-    <AssemblyName>AFK-Script-Interpreter</AssemblyName>
+    <AssemblyName>AFKScript</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArgumentsUtil, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ArgumentsUtil.1.0.3\lib\netstandard2.0\ArgumentsUtil.dll</HintPath>
@@ -51,6 +54,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

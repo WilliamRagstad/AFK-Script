@@ -9,6 +9,14 @@ A language developed by me.
 | -------------- | ------ |
 | File extension | .afk   |
 
+### Command-Line Options
+
+| Flag | Description                                 |
+| ---- | ------------------------------------------- |
+| /cp  | Run scripts as **parallel** child processes |
+
+
+
 ### INSTRUCTION SET
 
 Mandatory parameters are specified with "[...]" and optional with "(..)".
@@ -25,6 +33,7 @@ Mandatory parameters are specified with "[...]" and optional with "(..)".
 | START       | [program] (params)    | Starts a new process similar to using the command prompt     |
 | STOP        | [program]             | Stops a process if it is running                             |
 | PAUSE       |                       | Pause program and wait for user interaction                  |
+| SET         | [variable] [text]     | Store a text value in variable.                              |
 | #           | (comment)             | Everything to the right of the hash-tag will be commented out |
 
 ### Formatting
@@ -52,9 +61,10 @@ Mandatory parameters are specified with "[...]" and optional with "(..)".
 
 ### Environment Variables
 
-| Name  | Description                    |
-| ----- | ------------------------------ |
-| $TIME | Holds the current machine time |
+| Name  | Description                    | Format     |
+| ----- | ------------------------------ | ---------- |
+| $TIME | Holds the current machine time | HH:mm:ss   |
+| $DATE | Current date                   | yyyy/MM/dd |
 
 
 

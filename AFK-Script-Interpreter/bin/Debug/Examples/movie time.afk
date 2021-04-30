@@ -1,8 +1,8 @@
 # Read input and store in $URL
 
-
+SET $pageQuery "Webpage: "
 LOG "=== WEB OPENER ==="
-READ "Webpage: " $URL
+READ $pageQuery $URL
 AT 00:28
 LOG "Opening up $URL"
 START "" $URL
