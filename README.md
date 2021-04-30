@@ -3,6 +3,11 @@
 
 ![Downloads](https://img.shields.io/github/downloads/WilliamRagstad/AFK-Script/total)
 
+### Install
+
+[Download the latest release of AFK Script](https://github.com/WilliamRagstad/AFK-Script/releases/download/v1.0.0/AFKScript.zip).
+Unpack the archive on your computer and create a reference in your path environment to it. Now you should be able to run `AFKScript` in the terminal.
+
 ### About
 
 A time-based scripting language for automating user tasks.

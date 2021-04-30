@@ -24,7 +24,7 @@ namespace AFK_Script_Interpreter
         {
             // args = new[] {@"Examples\logging.afk", @"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
             //args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
-            args = new[] {@"Examples\logging.afk", "/cp", "/hl"};
+            // args = new[] {@"Examples\logging.afk", "/cp", "/hl"};
 
             Arguments a = Arguments.Parse(args);
             childProcesses = a.ContainsKey("cp");
