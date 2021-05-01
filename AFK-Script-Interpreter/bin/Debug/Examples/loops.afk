@@ -1,0 +1,5 @@
+:start
+LOG "HELLO"
+WAIT 500
+GOTO start
+:end

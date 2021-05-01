@@ -25,7 +25,7 @@ A time-based scripting language for automating user tasks.
 
 
 
-### INSTRUCTION SET
+### Instruction Set
 
 Mandatory parameters are specified with "[...]" and optional with "(...)".
 
@@ -33,6 +33,7 @@ Mandatory parameters are specified with "[...]" and optional with "(...)".
 | ----------- | --------------------- | ------------------------------------------------------------ |
 | AT          | (date) (time)         | Stops the program flow until the specified time has passed   |
 | WAIT        | [milliseconds]        | Waiting a certain number of **milliseconds**                 |
+| CLICK       |                       | Performs a mouse click event on the current mouse coordinate on the screen |
 | CLICK       | [x] [y]               | Performs a mouse click event on a given coordinate on the screen |
 | KEY         | [key] (key) (key) ... | performs a keystroke event of a single or a number of key combinations. |
 | ~~TYPE~~    | [text]                | **Sends** a specified character string **to standard input** or at the current text cursor |
@@ -41,7 +42,7 @@ Mandatory parameters are specified with "[...]" and optional with "(...)".
 | START       | [program] (params)    | Starts a new process similar to using the command prompt     |
 | ~~STOP~~    | [program]             | Stops a process if it is running                             |
 | PAUSE       |                       | Pause program and wait for user interaction                  |
-| SET         | [variable] [text]     | Store a text value in variable.                              |
+| SET         | [variable] [value]    | Store a value in variable. Value could be text or number.    |
 | #           | (comment)             | Everything to the right of the hash-tag will be commented out |
 
 ### Formatting
@@ -50,12 +51,14 @@ Mandatory parameters are specified with "[...]" and optional with "(...)".
 | ------------ | -------------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
 | date         | (MM)/(dd)/(yyyy)<br />(yyyy)-(MM)-(dd) | 05/29/2019, 2020-01-31, 02/14 or 04 | 3: Exact date<br />2: Exact day and month every year<br />1: Exact day every month and every year |
 | time         | (HH):(mm):(ss)                         | 05:50:06, 12:32 or 09               | 3: Exact time any day<br />2: Hour and minutes<br />1: Hour  |
-| variable     | $[name]                                | $shutdownTime, $repeat or $url      |                                                              |
-| milliseconds | [amount]                               | 1000, 500                           |                                                              |
-| x            | [integer]                              | 405, 316                            |                                                              |
-| y            | [integer]                              | 231, 675                            |                                                              |
-| key          | {[key name]} or [text]                 | ENTER, Cancel, F6 or HELLO          | [List or available keys](https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=netframework-4.8). |
 | text         | "[string]"                             | "Hello, world!"                     |                                                              |
+| number       | [integer]                              | 42, 100                             |                                                              |
+| variable     | $[name]                                | $shutdownTime, $repeat or $url      |                                                              |
+| label        | :[name]                                | :start, :end, :L1, :L2              |                                                              |
+| milliseconds | *Same as **number***                   | 1000, 500                           |                                                              |
+| x            | *Same as **number***                   | 405, 316                            |                                                              |
+| y            | *Same as **number***                   | 231, 675                            |                                                              |
+| key          | {[key name]} or [text]                 | ENTER, Cancel, F6 or HELLO          | [List or available keys](https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=netframework-4.8). |
 | program      | *Same as **text***                     |                                     |                                                              |
 | params       | *An array of **texts**.*               |                                     |                                                              |
 
@@ -73,6 +76,16 @@ Mandatory parameters are specified with "[...]" and optional with "(...)".
 | ----- | ------------------------------ | ---------- |
 | $TIME | Holds the current machine time | HH:mm:ss   |
 | $DATE | Current date                   | yyyy/MM/dd |
+
+### Labels
+
+Create a label on a new row using a prefix `:` with a trailing label name.
+
+```assembly
+:start # Create a label start
+LOG "HELLO"
+GOTO start
+```
 
 
 

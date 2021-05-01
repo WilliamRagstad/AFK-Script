@@ -25,6 +25,7 @@ namespace AFK_Script_Interpreter
             // args = new[] {@"Examples\logging.afk", @"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
             //args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
             // args = new[] {@"Examples\logging.afk", "/cp", "/hl"};
+            args = new[] {@"Examples\loops.afk"};
 
             Arguments a = Arguments.Parse(args);
             childProcesses = a.ContainsKey("cp");
@@ -92,6 +93,7 @@ namespace AFK_Script_Interpreter
                     Console.WriteLine("Could not show command line");
                 }
             }
+            Console.ReadKey(true);
         }
 
         static void Run(object parameters)
@@ -99,7 +101,7 @@ namespace AFK_Script_Interpreter
             string filepath = parameters.ToString();
             string filename = Path.GetFileName(filepath);
             string rawfilename = Path.GetFileNameWithoutExtension(filepath);
-            Dictionary<string, string> localVariables = new Dictionary<string, string>();
+            Dictionary<string, Variable> localVariables = new Dictionary<string, Variable>();
 
             // Check filetype
             if (Path.GetExtension(filepath).ToLower() != ".afk") {
@@ -108,6 +110,8 @@ namespace AFK_Script_Interpreter
             }
 
             string[] instructions = File.ReadAllLines(filepath);
+            Dictionary<string, int> labels = LocateLabels(instructions);
+
             for (int i = 0; i < instructions.Length; i++)
             {
                 string[] instructionParts = Regex.Matches(instructions[i].Split('#')[0], "(\"[^\"\\n]+\")|([^\\x20\\t\\n]+)", RegexOptions.Compiled).Cast<Match>().Select(
@@ -169,8 +173,8 @@ namespace AFK_Script_Interpreter
                             if (variable.StartsWith("$"))
                             {
                                 string value = Console.ReadLine();
-                                if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
-                                else localVariables[variable] = value;
+                                if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, Variable.CreateVariable(variable, value));
+                                else localVariables[variable] = Variable.CreateVariable(variable, value);
                             }
                             else
                             {
@@ -254,15 +258,29 @@ namespace AFK_Script_Interpreter
 							if (variable.StartsWith("$"))
 							{
 								string value = instructionArgs(1);
-								if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
-								else localVariables[variable] = value;
+								if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, Variable.CreateVariable(variable, value));
+								else localVariables[variable] = Variable.CreateVariable(variable, value);
 							}
 							else Error_UnexpectedToken(variable, "variable name", filename);
 						}
 						else Error_TooManyParams(instrcutionName, "[variable] [value]", filename);
                         break;
+                    case "GOTO":
+                        if (instructionArgsCount == 1)
+                        {
+							string label = instructionArgsRaw(0).ToUpper();
+                            if (labels.ContainsKey(label)) i = labels[label]; // Goto the first instruction after the label, i is incremented after break.
+                            else Console.WriteLine($"Unknown label '{label}'! Goto skipped");
+                        }
+                        else if (instructionArgsCount > 2) Error_TooManyParams(instrcutionName, "[label]", filename);
+                        else if (instructionArgsCount < 2) Error_TooFewParams(instrcutionName, "[label]", filename);
+                        break;
                     case "CLICK":
-                        if (instructionArgsCount == 2)
+                        if (instructionArgsCount == 0)
+                        {
+
+                        }
+                        else if (instructionArgsCount == 2)
                         {
                             int x, y;
                             if (int.TryParse(instructionArgs(0), out x) && int.TryParse(instructionArgs(1), out y))
@@ -275,16 +293,8 @@ namespace AFK_Script_Interpreter
                                 Error_UnexpectedToken(instructionArgs(0) + " or " + instructionArgs(1), "[x] [y]", filename);
                             }
                         }
-                        else if (instructionArgsCount > 2)
-                        {
-                            Error_TooManyParams(instrcutionName, "[x] [y]", filename);
-                            break;
-                        }
-                        else if (instructionArgsCount < 2)
-                        {
-                            Error_TooFewParams(instrcutionName, "[x] [y]", filename);
-                            break;
-                        }
+                        else if (instructionArgsCount > 2) Error_TooManyParams(instrcutionName, "[x] [y]", filename);
+                        else if (instructionArgsCount < 2) Error_TooFewParams(instrcutionName, "[x] [y]", filename);
                         break;
                     case "KEY":
                         if (instructionArgsCount > 0)
@@ -303,25 +313,41 @@ namespace AFK_Script_Interpreter
                         }
                         break;
                     default:
-                        Error_UnknownInstruction(instrcutionName, i, filename);
+                        if (instrcutionName.StartsWith(":")) continue; // Labels are not instructions and are located in the first pass
+                        else Error_UnknownInstruction(instrcutionName, i, filename);
                         break;
                 }
             }
         }
 
-        private static void SetVariable(string variable, string value, Dictionary<string, string> localVariables)
+        private static Dictionary<string, int> LocateLabels(string[] instructions)
         {
-            if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, value);
-            else localVariables[variable] = value;
+            Dictionary<string, int> labels = new Dictionary<string, int>();
+            for (int i = 0; i < instructions.Length; i++)
+            {
+                if (instructions[i].Trim().StartsWith(":"))
+                {
+                    string label = instructions[i].Trim().Replace(":","").ToUpper();
+                    if (!labels.ContainsKey(label)) labels.Add(label, i); // Found label
+                    else Console.WriteLine($"Warning, duplicate labels found on line {labels[label]+1} and line {i+1}! Using first occurence of label.");
+                }
+            }
+            return labels;
         }
 
-        static Dictionary<string, string> EnvironmentVariables = new Dictionary<string, string>()
+        private static void SetVariable(string variable, dynamic value, Dictionary<string, Variable> localVariables)
         {
-            {"$TIME", DateTime.Now.ToString("HH:mm:ss")},
-            {"$DATE", DateTime.Now.ToString("yyyy'/'MM'/'dd")},
-            {"$TEST", "Hello, this is a general test :D"}
+            if (!localVariables.ContainsKey(variable)) localVariables.Add(variable, Variable.CreateVariable(variable, value));
+            else localVariables[variable] = Variable.CreateVariable(variable, value);
+        }
+
+        static Dictionary<string, Variable> EnvironmentVariables = new Dictionary<string, Variable>()
+        {
+            {"$TIME", Variable.CreateVariable("TIME", _ => DateTime.Now.ToString("HH:mm:ss"))},
+            {"$DATE", Variable.CreateVariable("DATE", DateTime.Now.ToString("yyyy'/'MM'/'dd"))},
+            {"$TEST", Variable.CreateVariable("TEST", "Hello, this is a general test :D")}
         };
-        static string SubstituteVariables(string input, Dictionary<string, string> variables)
+        static string SubstituteVariables(string input, Dictionary<string, Variable> variables)
         {
             if (!input.Contains('$') && input.Length > 1) return input;
 
@@ -331,21 +357,43 @@ namespace AFK_Script_Interpreter
                 string varkey = EnvironmentVariables.ElementAt(i).Key;
                 while (input.Contains(varkey))
                 {
-                    input = input.Replace(varkey, EnvironmentVariables[varkey]);
+                    input = input.Replace(varkey, EnvironmentVariables[varkey].GetValue().ToString());
                 }
             }
 
             // Variables found
-            for (int i = 0; i < variables.Count; i++)
+            for (int i = LongestVariableName(variables); i > 0; i--)
             {
-                string varkey = variables.ElementAt(i).Key;
-                while (input.Contains(varkey))
+                Variable[] vars = VariablesWithNameLengthOf(i, variables);
+                if (vars.Length == 0) continue;
+                for (int j = 0; j < vars.Length; j++)
                 {
-                    input = input.Replace(varkey, variables[varkey]);
+                    while (input.Contains(vars[j].Name)) input = input.Replace(vars[j].Name, vars[j].GetValue().ToString());
                 }
             }
 
             return input;
+        }
+
+        static int LongestVariableName(Dictionary<string, Variable> variables)
+        {
+            int longest = 0;
+            for (int i = 0; i < variables.Count; i++)
+            {
+                int len = variables.ElementAt(i).Key.Length;
+                if (len > longest) longest = len;
+            }
+            return longest;
+        }
+
+        static Variable[] VariablesWithNameLengthOf(int length, Dictionary<string, Variable> variables)
+        {
+            List<Variable> result = new List<Variable>();
+            for (int i = 0; i < variables.Count; i++)
+            {
+                if (variables.ElementAt(i).Key.Length == length) result.Add(variables.ElementAt(i).Value);
+            }
+            return result.ToArray();
         }
 
         static void Error_UnknownInstruction(string instruction, int line, string file)
