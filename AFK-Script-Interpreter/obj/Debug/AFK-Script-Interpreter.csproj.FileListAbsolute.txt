@@ -103,3 +103,12 @@ D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\b
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.csproj.CopyComplete
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFKScript.exe
 D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFKScript.pdb
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\obj\Debug\AFK-Script-Interpreter.csprojAssemblyReference.cache
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\lua54.dll
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\liblua54.dylib
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\x86\lua54.dll
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\x64\lua54.dll
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\x64\liblua54.so
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\KeraLua.dll
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\NLua.dll
+D:\Documents\Visual Studio repos\AFK-Script-Interpreter\AFK-Script-Interpreter\bin\Debug\KeraLua.xml

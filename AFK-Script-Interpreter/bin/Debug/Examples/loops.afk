@@ -1,5 +1,10 @@
+@strict
+SET $duration "1000"
 :start
-LOG "HELLO"
-WAIT 500
-GOTO start
-:end
+LOG "Waiting to open Minecraft ($ACTIVE_PROGRAM)"
+:minecraft
+WAIT $duration
+IF not string.find($ACTIVE_PROGRAM, "Minecraft 1.16.5") start
+CLICK
+LOG "Clicked"
+GOTO minecraft
