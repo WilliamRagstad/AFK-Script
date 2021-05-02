@@ -1,9 +1,9 @@
-# Read input and store in $URL
+	# Read input and store in $URL
 
-SET $pageQuery "Webpage: "
-LOG "=== WEB OPENER ==="
-READ $pageQuery $URL
-AT 00:28
-LOG "Opening up $URL"
-START "" $URL
-PAUSE
+	SET $pageQuery "Webpage: "
+	LOG "=== WEB OPENER ==="
+	READ $URL $pageQuery
+	AT 00:28
+	LOG "Opening up $URL"
+	START "" $URL
+	PAUSE

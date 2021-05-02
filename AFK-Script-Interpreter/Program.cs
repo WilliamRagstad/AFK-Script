@@ -27,7 +27,7 @@ namespace AFK_Script_Interpreter
             // args = new[] {@"Examples\logging.afk", @"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
             //args = new[] {@"Examples\movie time.afk", @"Examples\program.afk", "/cp"};
             // args = new[] {@"Examples\logging.afk", "/cp", "/hl"};
-            args = new[] {@"Examples\lua.afk"};
+            // args = new[] {@"Examples\movie time.afk"};
 
             Arguments a = Arguments.Parse(args);
             childProcesses = a.ContainsKey("cp");
@@ -240,7 +240,7 @@ namespace AFK_Script_Interpreter
                         else Error_TooFewParams(instrcutionName, "[program] (argument1) (argument2) ...", filename);
                         break;
                     case "PAUSE":
-                        Console.WriteLine("Paused. Press any key to continue.");
+                        Console.WriteLine("Press any key to continue.");
                         Console.ReadKey(true);
                         break;
                     case "WAIT":

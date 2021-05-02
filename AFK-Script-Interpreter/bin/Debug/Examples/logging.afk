@@ -1,10 +1,10 @@
 
-SET $MYVAR "This is a custom variable value"
-SET $MYVAR2 1337
-LOG "Hello, world! The current time is: $TIME"
-LOG "The date is $DATE"
-LOG "I also have a var containing: $MYVAR"
-LOG "And: $MYVAR2"
-PAUSE
-LOG "But now the current time is: $TIME"
-PAUSE
+	SET $MYVAR "This is a custom variable value"
+	SET $MYVAR2 1337
+	LOG "Hello, world! The current time is: $TIME"
+	LOG "The date is $DATE"
+	LOG "I also have a var containing: $MYVAR"
+	LOG "And: $MYVAR2"
+	PAUSE
+	LOG "But now the current time is: $TIME"
+	PAUSE

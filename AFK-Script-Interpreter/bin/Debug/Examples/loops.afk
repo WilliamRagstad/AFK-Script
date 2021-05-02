@@ -1,10 +1,11 @@
 @strict
-SET $duration "1000"
+
+	SET $duration "1000"
 :start
-LOG "Waiting to open Minecraft ($ACTIVE_PROGRAM)"
+	LOG "Waiting to open Minecraft ($ACTIVE_PROGRAM)"
 :minecraft
-WAIT $duration
-IF not string.find($ACTIVE_PROGRAM, "Minecraft 1.16.5") start
-CLICK
-LOG "Clicked"
-GOTO minecraft
+	WAIT $duration
+	IF not string.find($ACTIVE_PROGRAM, "Minecraft 1.16.5") start
+	CLICK
+	LOG "Clicked"
+	GOTO minecraft

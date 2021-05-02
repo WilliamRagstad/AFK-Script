@@ -1,2 +1,6 @@
-SET $test 1 + 3 * 2
-LOG "Test is: $test"
+:text
+	SET $test 1 + 3 * 2
+	LOG "Test is: $test"
+	GOTO END
+
+:end
