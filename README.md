@@ -141,7 +141,7 @@ that the key enter was pressed. Wait until 17:45:00 has passed, open up the defa
 
 ```bash
 # Define $URL
-$URL = "https://twitter.com/williamragstad"
+SET $URL "https://twitter.com/williamragstad"
 AT 13:00
 START "" $URL
 ```
@@ -153,7 +153,7 @@ This prints the text *"Webpage to open: "* and prompts for a user input which wi
 ```bash
 # Read input and store in $URL
 LOG "=== WEB OPENER ==="
-READ "Webpage: " $URL
+READ $URL "Webpage: "
 AT 13:00
 LOG "Opening up $URL"
 START "" $URL
