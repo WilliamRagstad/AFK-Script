@@ -62,7 +62,7 @@ Mandatory parameters are specified with "[...]" and optional with "(...)".
 | x            | *Same as **number***                              | 405, 316                            |                                                              |
 | y            | *Same as **number***                              | 231, 675                            |                                                              |
 | key          | {[key name]} or [text]                            | ENTER, Cancel, F6 or HELLO          | [List or available keys](https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=netframework-4.8). |
-| expression   | any primitive type or composition using operators | "hej", 10 + 5, false + "!"          |                                                              |
+| expression   | any primitive type or **Lua** expression | "hej", 10 + 5, false + "!"          |                                                              |
 | program      | *Same as **text***                                |                                     |                                                              |
 | params       | *An array of **texts**.*                          |                                     |                                                              |
 
